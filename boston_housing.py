@@ -5,10 +5,11 @@ import numpy as np
 import pylab as pl
 from sklearn import datasets, cross_validation
 from sklearn.tree import DecisionTreeRegressor
+%pylab inline
 ################################
 ### ADD EXTRA LIBRARIES HERE ###
 ################################
-from sklearn.metrics import r2_score, make_scorer
+from sklearn.metrics import mean_squared_error, make_scorer
 
 def load_data():
     """Load the Boston dataset."""
@@ -30,25 +31,25 @@ def explore_city_data(city_data):
 
     # Please calculate the following values using the Numpy library
     # Size of data (number of houses)?
-    print ("Number of Houses in the data set: ", housing_prices.shape[0])
+    print "Number of Houses in the data set: ", housing_prices.shape[0]
      
     # Number of features?
-    print ("Number of features in the data set: ", housing_features.shape[1])
+    print "Number of features in the data set: ", housing_features.shape[1]
     
     # Minimum price?
-    print ("Minimum price in the data set: ", np.amin(housing_prices))
+    print "Minimum price in the data set: ", np.amin(housing_prices)
     
     # Maximum price?
-    print ("Maximum price in the data set: ", np.amax(housing_prices))
+    print "Maximum price in the data set: ", np.amax(housing_prices)
     
     # Calculate mean price?
-    print ("Mean price in the data set: ", np.mean(housing_prices))
+    print "Mean price in the data set: ", np.mean(housing_prices)
     
     # Calculate median price?
-    print ("Median price in the data set: ", np.median(housing_prices))
+    print "Median price in the data set: ", np.median(housing_prices)
 
     # Calculate standard deviation?
-    print ("Standard Deviation price in the data set: ", np.std(housing_prices))
+    print "Standard Deviation price in the data set: ", np.std(housing_prices)
 
 
 def performance_metric(label, prediction):
@@ -57,7 +58,7 @@ def performance_metric(label, prediction):
     ###################################
     ### Step 2. YOUR CODE GOES HERE ###
     ###################################
-    performance = r2_score(label, prediction)
+    performance = mean_squared_error(label, prediction)
     # http://scikit-learn.org/stable/modules/classes.html#sklearn-metrics-metrics
     return performance
 
@@ -87,7 +88,7 @@ def learning_curve(depth, X_train, y_train, X_test, y_test):
     train_err = np.zeros(len(sizes))
     test_err = np.zeros(len(sizes))
 
-    print ("Decision Tree with Max Depth: ")
+    print "Decision Tree with Max Depth: ", depth
 
     for i, s in enumerate(sizes):
 
@@ -119,7 +120,7 @@ def learning_curve_graph(sizes, train_err, test_err):
 def model_complexity(X_train, y_train, X_test, y_test):
     """Calculate the performance of the model as model complexity increases."""
 
-    print ("Model Complexity: ")
+    print "Model Complexity: "
 
     # We will vary the depth of decision trees from 2 to 25
     max_depth = np.arange(1, 25)
@@ -145,7 +146,7 @@ def model_complexity(X_train, y_train, X_test, y_test):
 
 def model_complexity_graph(max_depth, train_err, test_err):
     """Plot training and test error as a function of the depth of the decision tree learn."""
-    print (train_err)
+    print train_err
     pl.figure()
     pl.title('Decision Trees: Performance vs Max Depth')
     pl.plot(max_depth, test_err, lw=2, label = 'test error')
@@ -174,7 +175,7 @@ def fit_predict_model(city_data):
     # 1. Find the best performance metric
     # should be the same as your performance_metric procedure
     # http://scikit-learn.org/stable/modules/generated/sklearn.metrics.make_scorer.html
-    ftwo_scorer = make_scorer(r2_score)
+    ftwo_scorer = make_scorer(mean_squared_error, greater_is_better=False)
     
     # 2. Use gridearch to fine tune the Decision Tree Regressor and find the best model
     # http://scikit-learn.org/stable/modules/generated/sklearn.grid_search.GridSearchCV.html#sklearn.grid_search.GridSearchCV
@@ -184,14 +185,14 @@ def fit_predict_model(city_data):
    
   #  print reg.best_estimator_.get_params()
     # Fit the learner to the training data
-    print ("Final Model: ")
-    print (reg.fit(X, y))
-    print (reg.best_params_)
+    print "Final Model: "
+    print reg.fit(X, y)
+    print reg.best_params_
     # Use the model to predict the output of a particular sample
     x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
     y = reg.predict(x)
-    print ("House: " + str(x))
-    print ("Prediction: " + str(y))
+    print "House: " + str(x)
+    print "Prediction: " + str(y)
 
 
 def main():
